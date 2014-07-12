@@ -1,0 +1,8 @@
+#!/opt/local/bin/bash
+function server {
+	swipl --traditional -q -g "use_module(library(switex)),switex,halt" 
+}
+
+coproc pdflatex $* 
+
+server <&"${COPROC[0]}" >&"${COPROC[1]}" 

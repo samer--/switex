@@ -1,0 +1,56 @@
+% work with both plain TeX and LaTeX
+\ifx\ProvidePackage\@undefined
+  \ifx\swi@cap\@undefined
+  \else
+     % bail out if already loaded
+     \expandafter\expandafter
+     \expandafter\endinput
+   \fi
+\else
+  \ProvidePackage{switex}
+\fi
+
+\RequirePackage{newverbs}
+
+% will not work if user switches to  batchmode
+\errorstopmode
+\let\batchmode\relax
+
+\Verbdef\pc|%|
+\Verbdef\bs|\|
+
+\newtoks\swi@toks
+
+% \def\swidef#1#2{%
+% 	\immediate\write16{!Q=#2.}%
+% 	{\endlinechar=-1 \read -1 to \swi@reply
+% 	\gdef#1{\swi@reply}}}
+
+
+\long\def\swi#1{%
+  \immediate\write16{\bs Q=#1.}% 
+  \begingroup
+    \read -1 to \@tmp % reads one line or brace-delimeted group
+		\expandafter\swi@cap\@tmp\swi@stop 
+  \endgroup
+	\the\swi@toks % now spit out the collected tokens
+}
+
+% Old version: not needed because server always wraps output with {} now
+% \def\swi@par{\par}
+		% \ifx\@tmp\swi@par % if the line was empty, \@tmp contains just \par
+		% 	\global\swi@toks{}% ..so we assign empty token list
+		% \else
+		% 	\expandafter\swi@cap\@tmp\swi@stop % otherwise use \swi@ev to get tokens
+		% \fi
+
+% This macro captures the sequence of tokens read from stdin.
+% The \swi@stop token acts as a delimeter.
+% The space between #1 and \swi@stop is significant - it matches
+% the final space produced by the final line-ending of the input,
+% so \swi@toks is set to the input tokens minus the last line-ending,
+% but keeping any internal line endings.
+% NB, this assumes that \endlinechar is the default, which is space.
+\long\def\swi@cap#1 \swi@stop{\global\swi@toks{#1}}
+\def\swiverb{\Collectverb\swi}
+\long\def\swiphr#1{\swi{write_phrase(#1)}}
