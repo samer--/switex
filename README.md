@@ -56,8 +56,16 @@ If you install the Prolog side of things as an SWI package, then server.pl
 and latex.pl should be available as Prolog modules. 
 
 The shell script in bin/switex should be copied or linked to somewhere on your PATH.
+Note that this needs to use Gnu bash - the current version points to /opt/local/bin/bash
+since I am using MacPorts to manage Gnu software on my Mac. You will probably need to
+edit the script, at least until I sort out a better system.
 
 The TeX file tex/switex.sty should be copied or linked to somewhere in your TeX tree.
 
 ## Testing
 
+Go into the test directory and run the switex command against test.tex:
+
+	$ switex test.tex
+
+This should produce ``test.pdf``.
