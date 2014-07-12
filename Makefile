@@ -14,8 +14,12 @@ main:
 
 packdir:
 	mkdir -p $(PACKNAME) $(PACKNAME)/prolog 
+	mkdir -p $(PACKNAME) $(PACKNAME)/bin 
+	mkdir -p $(PACKNAME) $(PACKNAME)/tex 
 	sed -e "s/<VER>/$(VER)/g" < pack.pl | sed -e "s/<PACKNAME>/$(PACKNAME)/g" > $(PACKNAME)/pack.pl
 	rsync -ar --delete --exclude '.*' prolog $(PACKNAME)
+	rsync -ar --delete --exclude '.*' bin $(PACKNAME)
+	rsync -ar --delete --exclude '.*' tex $(PACKNAME)
 	cp -p README.md $(PACKNAME)
 
 pack: packdir

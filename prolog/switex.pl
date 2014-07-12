@@ -4,6 +4,8 @@
 */
 :- use_module(latex).
 
+:- meta_predicate write_phrase(//).
+
 switex :-
    log('Starting SWITeX server...\n',[]),
    current_prolog_flag(tty_control,TTY),
@@ -42,7 +44,7 @@ pre_query2(0'=) :- !, with_output_to(codes(C),query), format('{~s}\n',[C]), star
 pre_query2(C2) :- tex_output([0'\\,0'Q,C2|T]-T).
 
 query :- 
-   catch((read_term(Q,[]), log('SWI | ~q.\n',Q), once(Q)), Ex, handle(Ex)).
+   catch((read_term(Q,[]), log('SWI | ~q.\n',[Q]), user:once(Q)), Ex, handle(Ex)).
 
 % Process rest of line as normal TeX output given prefix as difference list
 tex_output(Head-Tail) :-
@@ -53,7 +55,7 @@ tex_output1(Rest,Head-Rest) :- log('TeX | ~s\n',[Head]), start.
 
 % If an exception occurs in the Prolog query, we output ERROR
 handle(Ex) :- 
-   write_phrase(cmd(swierror,["ERROR"])),
+   write_phrase(cmd(swierror,"ERROR")),
    print_message(error,Ex).
 
 write_phrase(Phrase) :-

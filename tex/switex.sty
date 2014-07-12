@@ -53,4 +53,5 @@
 % NB, this assumes that \endlinechar is the default, which is space.
 \long\def\swi@cap#1 \swi@stop{\global\swi@toks{#1}}
 \def\swiverb{\Collectverb\swi}
-\long\def\swiphr#1{\swi{write_phrase(#1)}}
+\long\def\swiphr#1{\swi{switex:write_phrase(user:(#1))}}
+\long\def\swierror#1{\fbox{SWI ERROR}\typeout{SWI Error: #1}}

@@ -53,6 +53,11 @@ that various LaTeX packages provide.
 ## Installation
 
 If you install the Prolog side of things as an SWI package, then server.pl
-and latex.pl should be available as Prolog modules. Then the switex shell
-script should be placed somewhere on your PATH.
+and latex.pl should be available as Prolog modules. 
+
+The shell script in bin/switex should be copied or linked to somewhere on your PATH.
+
+The TeX file tex/switex.sty should be copied or linked to somewhere in your TeX tree.
+
+## Testing
 

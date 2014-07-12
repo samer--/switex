@@ -1,6 +1,6 @@
 #!/opt/local/bin/bash
 function server {
-	swipl --traditional -q -g "use_module(library(switex)),switex,halt" 
+	swipl --traditional -q -f none -g "use_module(library(switex)),switex,halt" 
 }
 
 coproc pdflatex $* 

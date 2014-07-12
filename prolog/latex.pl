@@ -3,18 +3,26 @@
 */
 
 :- module(latex, 
-   [  cm//0, lbr//0
+   [  lbr//0
    ,  nm//1, (#)//1
+   ,  pc//0
    ,  env//3
-   ,  cmd//2
+   ,  cmd//2, cmd//3
    ,  def//3
    ]).
 
-:- use_module(library(dcgu)).
+:- meta_predicate 
+      env(+,//,//)
+   ,  def(+,//,//)
+   ,  cmd(+,//,//)
+   ,  cmd(+,//).
+
+brace(C) --> "{", C, "}".
+wr(A,H,T) :- with_output_to(codes(H,T),write(A)).
 
 env(Name,Opts,Body) -->
-   nm(begin), brace(at(Name)), Opts, 
-   Body, nm(end), brace(at(Name)).
+   nm(begin), brace(wr(Name)), Opts, 
+   Body, nm(end), brace(wr(Name)).
 
 def(Name,Pattern,Body) --> nm(def), nm(Name), Pattern, brace(Body).
 
@@ -22,7 +30,11 @@ cm --> "%".
 pc --> "\\%".
 amp --> "\\&".
 lbr --> "\\\\".
-nm(A) --> "\\", at(A).
+nm(A) --> "\\", wr(A).
 #(N) --> "#", wr(N).
 
-cmd(N,Args) --> nm(N), seqmap(brace,Args).
+cmd(N,A1) --> nm(N), brace(A1).
+cmd(N,A1,A2) --> nm(N), brace(A1), brace(A2).
+
+seqmap(_,[]) --> [].
+seqmap(P,[A1|AS]) --> call(P,A1), seqmap(P,AS).
