@@ -1,10 +1,17 @@
-:- module(switex, [ switex/0 ]).
+:- module(switex, [ switex/0, switex_main/0 ]).
 
 /** <module> LaTeX/Prolog server module
 */
 :- use_module(latex).
 
 :- meta_predicate write_phrase(//).
+
+switex_main :-
+   on_signal(int,_,exit), % allows direct exit in case of deadlock
+   switex,
+   halt.
+
+exit(Sig) :- log('CTL | Terminating due to sig~w.\n',[Sig]), halt(1).
 
 switex :-
    log('Starting SWITeX server...\n',[]),
@@ -47,7 +54,6 @@ pre_query2(0'=) :- !,
 pre_query2(C2) :- tex_output([0'\\,0'Q,C2|T]-T).
 
 query :- 
-   log('SWI | About to call read term.\n',[]),
    catch((read_term(Q,[]), log('SWI | -> ~q.\n',[Q]), user:once(Q)), Ex, handle(Ex)).
 
 % Process rest of line as normal TeX output given prefix as difference list

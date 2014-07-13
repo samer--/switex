@@ -75,7 +75,8 @@ This should produce ``test.pdf``.
 The communication between TeX and Prolog is somewhat fragile. In particular,
 if the Prolog query written out by ``\swi`` or ``\swiverb`` appears to
 be an incomplete Prolog term, then the Prolog side will hang waiting for its
-completion, leading to a deadlock, which can only by broken by typing Ctrl-Z
-at the terminal. Similarly, if the Prolog side writes back an incomplete TeX
-group, then TeX will hang waiting for its completion.
+completion, leading to a deadlock. Similarly, if the Prolog side writes back 
+an incomplete TeX group, then TeX will hang waiting for its completion.
+Currently, there is no way to recover from this situation, but typing Ctrl-C
+at the terminal or sending a SIGINT will kill both processes.
 
