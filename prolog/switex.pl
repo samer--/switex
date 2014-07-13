@@ -40,11 +40,15 @@ pre_query(0'Q) :- !, get_code(C2), pre_query2(C2).
 pre_query(C1) :- tex_output([0'\\,C1|T]-T).
 
 pre_query2(-1) :- !, log('CTL | Possible incomplete Prolog query "\\Q"\n',[]).
-pre_query2(0'=) :- !, with_output_to(codes(C),query), format('{~s}\n',[C]), start.
+pre_query2(0'=) :- !, 
+   with_output_to(codes(C),query), 
+   log('SWI | <- {~s}\n',[C]),
+   format('{~s}\n',[C]), start.
 pre_query2(C2) :- tex_output([0'\\,0'Q,C2|T]-T).
 
 query :- 
-   catch((read_term(Q,[]), log('SWI | ~q.\n',[Q]), user:once(Q)), Ex, handle(Ex)).
+   log('SWI | About to call read term.\n',[]),
+   catch((read_term(Q,[]), log('SWI | -> ~q.\n',[Q]), user:once(Q)), Ex, handle(Ex)).
 
 % Process rest of line as normal TeX output given prefix as difference list
 tex_output(Head-Tail) :-
@@ -55,8 +59,8 @@ tex_output1(Rest,Head-Rest) :- log('TeX | ~s\n',[Head]), start.
 
 % If an exception occurs in the Prolog query, we output ERROR
 handle(Ex) :- 
-   write_phrase(cmd(swierror,"ERROR")),
-   print_message(error,Ex).
+   print_message(error,Ex),
+   write_phrase(cmd(swierror,"ERROR")).
 
 write_phrase(Phrase) :-
 	phrase(Phrase,Codes,[]),

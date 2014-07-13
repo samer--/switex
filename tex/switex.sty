@@ -11,6 +11,7 @@
 \fi
 
 \RequirePackage{newverbs}
+\RequirePackage{xstring}
 
 % will not work if user switches to  batchmode
 \errorstopmode
@@ -36,6 +37,19 @@
 	\the\swi@toks % now spit out the collected tokens
 }
 
+{ \catcode`\^^M=13%
+	\long\global\def\swi@verb#1{%
+		\begingroup%
+			\catcode`\^^M=\active%
+			\StrSubstitute{#1}{^^M}{^^J}[\tmp]%
+			\immediate\write16{\bs Q=\tmp.}% 
+		\endgroup%
+		\begingroup%
+			\read -1 to \@tmp% reads one line or brace-delimeted group
+			\expandafter\swi@cap\@tmp\swi@stop%
+		\endgroup%
+		\the\swi@toks% now spit out the collected tokens
+}}
 % Old version: not needed because server always wraps output with {} now
 % \def\swi@par{\par}
 		% \ifx\@tmp\swi@par % if the line was empty, \@tmp contains just \par
@@ -52,6 +66,6 @@
 % but keeping any internal line endings.
 % NB, this assumes that \endlinechar is the default, which is space.
 \long\def\swi@cap#1 \swi@stop{\global\swi@toks{#1}}
-\def\swiverb{\Collectverb\swi}
+\def\swiverb{\Collectverb\swi@verb}
 \long\def\swiphr#1{\swi{switex:write_phrase(user:(#1))}}
 \long\def\swierror#1{\fbox{SWI ERROR}\typeout{SWI Error: #1}}

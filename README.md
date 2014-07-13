@@ -21,7 +21,7 @@ QATEX system:
 
 ## Implementation details
 
-The Prolog side of the system is implemented in prolog/server.pl, with
+The Prolog side of the system is implemented in prolog/switex.pl, with
 latex.pl supplying a DCG for writing out LaTeX code. The TeX side is
 implemented in tex/switex.sty, which writes requests for content on its
 standard output stream, and expects an answer on standard input.
@@ -52,7 +52,7 @@ that various LaTeX packages provide.
 
 ## Installation
 
-If you install the Prolog side of things as an SWI package, then server.pl
+If you install the Prolog side of things as an SWI package, then switex.pl
 and latex.pl should be available as Prolog modules. 
 
 The shell script in bin/switex should be copied or linked to somewhere on your PATH.
@@ -69,3 +69,13 @@ Go into the test directory and run the switex command against test.tex:
 	$ switex test.tex
 
 This should produce ``test.pdf``.
+
+## Bugs
+
+The communication between TeX and Prolog is somewhat fragile. In particular,
+if the Prolog query written out by \verb|\swi| or \verb|\swiverb| appears to
+be an incomplete Prolog term, then the Prolog side will hang waiting for its
+completion, leading to a deadlock, which can only by broken by typing Ctrl-Z
+at the terminal. Similarly, if the Prolog side writes back an incomplete TeX
+group, then TeX will hang waiting for its completion.
+
