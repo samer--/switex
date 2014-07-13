@@ -1,8 +1,13 @@
-#!/opt/local/bin/bash
+#!/bin/sh
 function server {
-swipl --traditional -q -f none -g "use_module(library(switex)),switex_main" 
+	swipl --traditional -q -f none -g "use_module(library(switex)),switex_main" 
 }
-
-coproc pdflatex $* 
-
-server <&"${COPROC[0]}" >&"${COPROC[1]}" 
+p0=.switex.in
+p1=.switex.out
+mkfifo $p0 $p1
+pdflatex $* <$p1 >$p0 &
+exec 3> $p1 4< $p0
+server >&3 <&4
+rm $p0 $p1
+# coproc pdflatex $* 
+# server <&"${COPROC[0]}" >&"${COPROC[1]}" 
