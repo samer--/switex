@@ -68,7 +68,7 @@ Go into the test directory and run the switex command against test.tex:
 
 	$ switex test.tex
 
-This should produce ``test.pdf``.
+This should produce ``test.pdf``, which should look similar to ``test-sample.pdf``.
 
 ## Bugs
 

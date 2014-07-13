@@ -74,5 +74,6 @@ write_phrase(Phrase) :-
 
 log(Msg,Args) :- format(user_error,Msg,Args).
 
-module_tex_preamble --> def(phr, #(1), cmd(swi,[(at(phr),paren(#(1)))])).
+% Not used at the moment
+% module_tex_preamble --> def(swiphr, #(1), cmd(swi,(wr(switex),":",wr(write_phrase),paren(#(1))))).
 
