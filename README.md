@@ -73,7 +73,7 @@ This should produce ``test.pdf``.
 ## Bugs
 
 The communication between TeX and Prolog is somewhat fragile. In particular,
-if the Prolog query written out by \verb|\swi| or \verb|\swiverb| appears to
+if the Prolog query written out by ``\swi`` or ``\swiverb`` appears to
 be an incomplete Prolog term, then the Prolog side will hang waiting for its
 completion, leading to a deadlock, which can only by broken by typing Ctrl-Z
 at the terminal. Similarly, if the Prolog side writes back an incomplete TeX
