@@ -5,7 +5,7 @@
 # PLLD=/usr/local/bin/plld -p /usr/local/bin/swipl
 
 PACKNAME=switex
-VER=0.0.3
+VER=0.0.4
 PACKFILE=release/$(PACKNAME)-$(VER).tgz
 # ---------------- end of configuration ---------------
 
@@ -16,10 +16,13 @@ packdir:
 	mkdir -p $(PACKNAME) $(PACKNAME)/prolog 
 	mkdir -p $(PACKNAME) $(PACKNAME)/bin 
 	mkdir -p $(PACKNAME) $(PACKNAME)/tex 
+	mkdir -p $(PACKNAME) $(PACKNAME)/test 
 	sed -e "s/<VER>/$(VER)/g" < pack.pl | sed -e "s/<PACKNAME>/$(PACKNAME)/g" > $(PACKNAME)/pack.pl
 	rsync -ar --delete --exclude '.*' prolog $(PACKNAME)
 	rsync -ar --delete --exclude '.*' bin $(PACKNAME)
 	rsync -ar --delete --exclude '.*' tex $(PACKNAME)
+	cp -p test/test.pl $(PACKNAME)/test
+	cp -p test/test-sample.pdf $(PACKNAME)/test
 	cp -p README.md $(PACKNAME)
 
 pack: packdir
